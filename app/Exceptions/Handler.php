@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Illuminate\Http\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -47,6 +48,29 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+
+    public function render($request, Throwable $exception)
+    {
+
+        if ($exception instanceof ErrorException  ) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'data' =>[
+                        'type' => 'error',
+                        'code' => Response::HTTP_BAD_REQUEST,
+                        'name' => 'Server Error',
+                        'description' => 'HIDDEN',
+                    ]
+                ],
+                Response::HTTP_BAD_REQUEST);
+        }
+        if ($exception instanceof AppException) {
+            return $exception->toJson();
+        }
+        return parent::render($request, $exception);
     }
 
 }
