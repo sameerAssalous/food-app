@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Module\Order\Commands;
 
-use App\Exceptions\AppException;
 use Module\Order\Exceptions\InvalidOrderIdException;
-use Module\Order\Exceptions\InvalidProductQuantity;
+use Module\Order\Exceptions\InvalidProductQuantityException;
 use Ramsey\Uuid\Uuid;
 
 class CreateOrderCommand
@@ -24,7 +23,7 @@ class CreateOrderCommand
                 throw new InvalidOrderIdException();
             }
             if(!is_int((int) $product['quantity'])){
-                throw new InvalidProductQuantity();
+                throw new InvalidProductQuantityException();
             }
         }
     }
